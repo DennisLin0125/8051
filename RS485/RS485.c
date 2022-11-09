@@ -71,38 +71,38 @@ void system_init(void)
 com_interrupt(void) interrupt 4 using 3
 {
 	uchar_8 RECEIVR_buffer;
-	if(RI)         								  //處理接收中斷
+	if(RI)         								//處理接收中斷
 	{
-		RI=0;       								  //清出接收中斷旗標位元
-		RECEIVR_buffer=SBUF; 					  //接收串列埠資料
-		if(point==0)         					  //如果還沒有接收到起始位元
+		RI=0;       							//清出接收中斷旗標位元
+		RECEIVR_buffer=SBUF; 					//接收串列埠資料
+		if(point==0)         					//如果還沒有接收到起始位元
 		{
-			if(RECEIVR_buffer==0xFE) 			  //判斷是否起始旗標位元
+			if(RECEIVR_buffer==0xFE) 			//判斷是否起始旗標位元
 			{
 				buffer[point++]=RECEIVR_buffer; //把接收到的資料放入緩衝區
 			}
 			else
 				point=0;                        //不是,繼續等待起始位元
 		}
-		else if(point>0&&point<10)            // 0<point<10  判斷是否夠接收10bit資料
+		else if(point>0&&point<10)              // 0<point<10  判斷是否夠接收10bit資料
 
-			buffer[point++]=RECEIVR_buffer;    // 不夠,把接收到的資料放入緩衝區
+			buffer[point++]=RECEIVR_buffer;     // 不夠,把接收到的資料放入緩衝區
 
 		else if(point==10)
 		{
-			if(RECEIVR_buffer==0xEF)           //判斷結束旗標是否正確
+			if(RECEIVR_buffer==0xEF)            //判斷結束旗標是否正確
 			{
 				buffer[point]=RECEIVR_buffer;   //把接收到的資料放入緩衝區
 				Slave_AD[ADD_num++]=buffer[2];  //把接收到的位址放入位址記憶體
-													     //表示該位址有有效設備
+											    //表示該位址有有效設備
 			}
 			else
 				point=0;                        //不是,繼續等待起始位元
 		}
 		else
-			point=0;                           //緩衝區已滿,清除緩衝區內資料重新接收
+			point=0;                            //緩衝區已滿,清除緩衝區內資料重新接收
 	}
-	if(TI)                                   //處理發送中斷
+	if(TI)                                      //處理發送中斷
 	{
 		TI=0;
 	}
