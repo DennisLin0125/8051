@@ -82,12 +82,14 @@ com_interrupt(void) interrupt 4 using 3
 				buffer[point++]=RECEIVR_buffer; //把接收到的資料放入緩衝區
 			}
 			else
+			{
 				point=0;                        //不是,繼續等待起始位元
+			}
 		}
 		else if(point>0&&point<10)                      // 0<point<10  判斷是否夠接收10bit資料
-
+		{
 			buffer[point++]=RECEIVR_buffer;         // 不夠,把接收到的資料放入緩衝區
-
+		}
 		else if(point==10)
 		{
 			if(RECEIVR_buffer==0xEF)                //判斷結束旗標是否正確
@@ -97,10 +99,14 @@ com_interrupt(void) interrupt 4 using 3
 								//表示該位址有有效設備
 			}
 			else
+			{	
 				point=0;                        //不是,繼續等待起始位元
+			}
 		}
 		else
+		{	
 			point=0;                            	//緩衝區已滿,清除緩衝區內資料重新接收
+		}
 	}
 	if(TI)                                      		//處理發送中斷
 	{
