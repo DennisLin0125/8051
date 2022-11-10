@@ -94,7 +94,7 @@ com_interrupt(void) interrupt 4 using 3
 		{
 			if(RECEIVR_buffer==0xEF)                //判斷結束旗標是否正確
 			{
-				buffer[point++]=RECEIVR_buffer;   //把接收到的資料放入緩衝區
+				buffer[point++]=RECEIVR_buffer; //把接收到的資料放入緩衝區
 				Slave_AD[ADD_num++]=buffer[2];  //把接收到的位址放入位址記憶體
 								//表示該位址有有效設備
 			}
