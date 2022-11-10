@@ -66,7 +66,7 @@ void system_init(void)
 }
 //-----------------------------------------------------------------------
 // 函數名稱 : com_interrupt() 系統初始化
-// 函數功能 : 接收包括起始位"S"在內的10bit資料到緩衝區
+// 函數功能 : 接收包括起始位0xFE,位址位和終止位0xEF在內的10bit資料
 //-----------------------------------------------------------------------
 com_interrupt(void) interrupt 4 using 3
 {
@@ -94,7 +94,7 @@ com_interrupt(void) interrupt 4 using 3
 		{
 			if(RECEIVR_buffer==0xEF)                //判斷結束旗標是否正確
 			{
-				buffer[point]=RECEIVR_buffer;   //把接收到的資料放入緩衝區
+				buffer[point++]=RECEIVR_buffer;   //把接收到的資料放入緩衝區
 				Slave_AD[ADD_num++]=buffer[2];  //把接收到的位址放入位址記憶體
 								//表示該位址有有效設備
 			}
@@ -178,5 +178,5 @@ void main(void)
 		write_buffer(i++);        //寫查詢第i號設備的發送資訊
 		COM_send();               //呼叫發送函數,完成發送
 		timer0_init();            //完成一次查詢,重新初始timer0,準備下一次查詢
-	}while(time_over_flag&&i<10);
+	}while(time_over_flag && i<10);
 }
