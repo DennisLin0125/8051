@@ -12,9 +12,6 @@ sbit RE_DE=P1^0;
 uchar_8 buffer[COUNT];           //定義接收緩衝區
 uchar_8 point;                   //定義接收資料個數指示變數
 
-void UART_init();                //串列埠初始化函數
-void COM_send(void);             //串列埠接收函數
-uchar_8 CLU_checkdata(void);     //計算同位元函數
 //------------------------------------------------------------
 // 函數名稱 : UART_init()串列初始化函數
 // 函數功能 : 在系統時脈為11.0592MHz時,設定串列資料傳輸率為9600
@@ -40,13 +37,13 @@ void UART_init()
 com_interrupt(void) interrupt 4 using 3
 {
 	uchar_8 RECEIVR_buffer;
-	if(RI)         								  //處理接收中斷
+	if(RI)         						//處理接收中斷
 	{
-		RI=0;       								  //清出接收中斷旗標位元
-		RECEIVR_buffer=SBUF; 					  //接收串列埠資料
-		if(point==0)         					  //如果還沒有接收到起始位元
+		RI=0;       					//清出接收中斷旗標位元
+		RECEIVR_buffer=SBUF; 				//接收串列埠資料
+		if(point==0)         				//如果還沒有接收到起始位元
 		{
-			if(RECEIVR_buffer==0xFE) 			  //判斷是否起始旗標位元
+			if(RECEIVR_buffer==0xFE) 		//判斷是否起始旗標位元
 			{
 				buffer[point++]=RECEIVR_buffer; //起始正確,接收起始位元
 			}
@@ -55,9 +52,9 @@ com_interrupt(void) interrupt 4 using 3
 				point=0;                        //不是,繼續等待起始位元
 			}
 		}
-		else if(point==10)                    //是否地址位
+		else if(point==10)                    		//是否地址位
 		{
-			if(RECEIVR_buffer==ADD )           //判斷地址是否匹配
+			if(RECEIVR_buffer==ADD )           	//判斷地址是否匹配
 			{
 				buffer[point++]=RECEIVR_buffer; //位址匹配,接收開始接收
 			}
@@ -66,16 +63,16 @@ com_interrupt(void) interrupt 4 using 3
 				point=0;                        //不是,繼續等待起始位元
 			}
 		}
-		else if(point>0&&point<10)            // 0<point<10  判斷是否夠接收10bit資料
+		else if(point>0&&point<10)            		// 0<point<10  判斷是否夠接收10bit資料
 		{
-			buffer[point++]=RECEIVR_buffer;    // 不夠,把接收到的資料放入緩衝區
+			buffer[point++]=RECEIVR_buffer;    	// 不夠,把接收到的資料放入緩衝區
 		}
 		else
 		{
-			point=0;                           //緩衝區已滿,清除緩衝區內資料重新接收
+			point=0;                           	//緩衝區已滿,清除緩衝區內資料重新接收
 		}
 	}
-	if(TI)                                   //處理發送中斷
+	if(TI)                                   		//處理發送中斷
 	{
 		TI=0;
 	}
