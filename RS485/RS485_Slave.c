@@ -52,7 +52,7 @@ com_interrupt(void) interrupt 4 using 3
 				point=0;                        //不是,繼續等待起始位元
 			}
 		}
-		else if(point==10)                    		//是否地址位
+		else if(point==1)                    		//是否地址位
 		{
 			if(RECEIVR_buffer==ADD )           	//判斷地址是否匹配
 			{
