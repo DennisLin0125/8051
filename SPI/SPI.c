@@ -26,9 +26,9 @@ void SPI_SendByte (uint_8 ch)
 	{
 		delayNOP();        
 		SCK=0;             //時脈置低
-		if((ch&0x80)==0x80)//若發送的資料最高位元為1,則發送1
+		if((ch&0x80)==0x80)//若發送的資料最高位元為1
 		{
-			MOSI=1;         //傳送1
+			MOSI=1;         //則傳送1
 		}
 		else
 		{
@@ -58,9 +58,9 @@ uint_8 SPI_ReceiveByte(void)
 		delayNOP();
 		tdata<<=1;         //左移1位元
 		
-		if(MISO==1)        //若發送的資料最高位元為1,則發送1
+		if(MISO==1)        //若接收到的位元為1
 		{
-			tdata|=0x01;    //若接收到的位元為1,則資料的最後一位元置1
+			tdata|=0x01;    //則資料的最後一位元置1
 		}
 		else
 		{
@@ -92,9 +92,9 @@ uint_8 SPI_Send_ReceiveByte(uint_8 ch)
 		{
 			tdata<<=1;         //左移1位元
 			
-			if(MISO==1)        //若發送的資料最高位元為1,則發送1
+			if(MISO==1)        //若接收到的位元為1
 			{
-				tdata|=0x01;    //若接收到的位元為1,則資料的最後一位元置1
+				tdata|=0x01;    //則資料的最後一位元置1
 			}
 			else
 			{
@@ -102,9 +102,9 @@ uint_8 SPI_Send_ReceiveByte(uint_8 ch)
 			}
 		}
 		{
-			if((ch&0x80)==0x80)//若發送的資料最高位元為1,則發送1
+			if((ch&0x80)==0x80)//若發送的資料最高位元為1
 			{
-				MOSI=1;         //傳送1
+				MOSI=1;         //則傳送1
 			}
 			else
 			{
