@@ -58,13 +58,13 @@ uint_8 SPI_ReceiveByte(void)
 		delayNOP();
 		tdata<<=1;         //左移1位元
 		
-		if(MISO==1)        //若接收到的位元為1
+		if(MISO==1)        //若接收到的資料為1
 		{
-			tdata|=0x01;    //則資料的最後一位元置1
+			tdata|=0x01;    //則tdata的最後一位元置1
 		}
 		else
 		{
-			tdata&=0xFE;    //否則資料的最後一位元置0
+			tdata&=0xFE;    //否則tdata的最後一位元置0
 		}
 		SCK=1;
 	}
@@ -92,13 +92,13 @@ uint_8 SPI_Send_ReceiveByte(uint_8 ch)
 		{
 			tdata<<=1;         //左移1位元
 			
-			if(MISO==1)        //若接收到的位元為1
+			if(MISO==1)        //若接收到的資料為1
 			{
-				tdata|=0x01;    //則資料的最後一位元置1
+				tdata|=0x01;    //則tdata的最後一位元置1
 			}
 			else
 			{
-				tdata&=0xFE;    //否則資料的最後一位元置0
+				tdata&=0xFE;    //否則tdata的最後一位元置0
 			}
 		}
 		{
