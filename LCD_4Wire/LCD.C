@@ -1,34 +1,26 @@
 //-------------變數定義----------------
-#include <reg52.h>
-#include <intrins.h> 
+#include <reg52.h> 
 sbit  wled  = P3^7;
-sbit  RS    = P2^4;
-sbit  RW    = P2^5;
-sbit  EN    = P2^6;
+sbit  RS    = P0^0;
+sbit  EN    = P0^1;
 //-------------------------------------
 // 函數名稱 : delay
 // 函數功能 : 延遲
 //-------------------------------------
 void delay(int d)
 {
-    int i, j;
-    for(i=0; i<d; i++)
-        for(j=0; j<200; j++);
+	int i,j;
+	for(i=0;i<d;i++)
+		for(j=0;j<200;j++);
 }
 //-------------------------------------
-// 函數名稱 : led_blink
-// 函數功能 : Led閃爍
+// 函數名稱 : delay1
+// 函數功能 : 短暫延遲
 //--------------------------------------
-void led_blink(void)
+void delay1(void)
 {
-    int i;
-    for(i=0;i<2;i++)
-    {
-        wled=0;  
-        delay(50);
-        wled=1;  
-        delay(50);
-    }
+	int i;
+	for(i=0;i<10;i++);
 }
 //-------------------------------------
 // 函數名稱 : LCD_EN
@@ -36,10 +28,10 @@ void led_blink(void)
 //--------------------------------------
 void LCD_EN(void)
 {
-    EN=1; 
-    _nop_();
-    EN=0; 
-    _nop_();
+	EN=1; 
+	delay1();
+	EN=0; 
+	delay1();
 }
 //-------------------------------------
 // 函數名稱 : write_com
@@ -47,13 +39,13 @@ void LCD_EN(void)
 //--------------------------------------
 void write_com(unsigned char c)
 {
-    P0=c; 
-    RS=0; 
-    LCD_EN(); 
-    c<<=4;
-    P0=c; 
-    RS=0; 
-    LCD_EN();
+	P0=c; 
+	RS=0; 
+	LCD_EN(); 
+	c<<=4;
+	P0=c; 
+	RS=0; 
+	LCD_EN();
 }
 //-------------------------------------
 // 函數名稱 : write_data
@@ -61,34 +53,33 @@ void write_com(unsigned char c)
 //--------------------------------------
 void write_data(unsigned char c)
 {
-    P0=c; 
-    RS=1; 
-    LCD_EN(); 
-    c<<=4;
-    P0=c; 
-    RS=1; 
-    LCD_EN();
-  }
+	P0=c; 
+	RS=1; 
+	LCD_EN(); 
+	c<<=4;
+	P0=c; 
+	RS=1; 
+	LCD_EN();
+}
 //-------------------------------------
 // 函數名稱 : init_lcd
 // 函數功能 : 4bit 初始化LCD 
 //--------------------------------------
 void init_lcd(void)
 {
-    RW=0;
-    P0=0x30;  
-    LCD_EN();
-    P0=0x30;  
-    LCD_EN();
-    P0=0x30;  
-    LCD_EN();
-    P0=0x20;  
-    LCD_EN();
-    write_com(0x28);  /* 4 bit I/O 雙列顯示 */
-    write_com(0x0e);  /* 游標出現,不閃爍 */
-    write_com(0x06);  /* 每次向右移,顯示螢幕不移動 */
-    write_com(0x01);  /* 清除螢幕 */
-    delay(100);
+	P0=0x30;  
+	LCD_EN();
+	P0=0x30;  
+	LCD_EN();
+	P0=0x30;  
+	LCD_EN();
+	P0=0x20;
+	LCD_EN();
+	write_com(0x28);  /* 4 bit I/O 雙列顯示 */
+	write_com(0x0e);  /* 游標出現,不閃爍 */
+	write_com(0x06);  /* 每次向右移,顯示螢幕不移動 */
+	write_com(0x01);  /* 清除螢幕 */
+	delay(100);
 }
 //-------------------------------------
 // 函數名稱 : print
@@ -96,28 +87,28 @@ void init_lcd(void)
 //--------------------------------------
 void print(char line, char *str)
 {
-    char i;
-    if(line==1)
-    {  
-        write_com(0x80);
-        for(i=0;i<16;i++) 
-            write_data(' ');
-        write_com(0x80); 
-    }
-    else
-    {  
-        write_com(0xc0);
-        for(i=0; i<16; i++) 
-            write_data(' ');
-        write_com(0xc0); 
-    }
+	char i;
+	if(line==1)
+	{  
+		write_com(0x80);
+		for(i=0;i<16;i++)
+			write_data(' ');
+		write_com(0x80);
+	}
+	else
+	{  
+		write_com(0xc0);
+		for(i=0;i<16;i++)
+			write_data(' ');
+		write_com(0xc0);
+	}
 
-    i=0;
+	i=0;
 
-    do     
-    { 
-        write_data(*str++);    //將字串寫入
-    }while(*str!='\0');
+	do     
+	{ 
+		write_data(*str++);    //將字串寫入
+	}while(*str!='\0');
 }
 //-------------------------------------
 // 函數名稱 : print1
@@ -125,8 +116,8 @@ void print(char line, char *str)
 //--------------------------------------
 void print1(char x, char w)
 {
-    write_com(0x80+x);
-    write_data(w);
+	write_com(0x80+x);
+	write_data(w);
 }
 //-------------------------------------
 // 函數名稱 : print2
@@ -134,8 +125,8 @@ void print1(char x, char w)
 //--------------------------------------
 void print2(char x, char w)
 {
-    write_com(0xc0+x);
-    write_data(w);
+	write_com(0xc0+x);
+	write_data(w);
 }
 //-------------------------------------
 // 函數名稱 : main
@@ -143,15 +134,13 @@ void print2(char x, char w)
 //--------------------------------------
 void main(void)
 {
-   EN=0;
-   init_lcd();
+	EN=0;
+	init_lcd();
 
-   led_blink();
-
-   print(1,"8051 lcd test...");
-   print(2,"HELLO world.....");
-   print1(15, '1');
-   print2(15, '2');
-   while(1);
+	print(1,"8051 LCD TEST...");
+	print(2,"HELLO DENNIS....");
+	print1(15, '1');
+	print2(15, '2');
+	while(1);
 }
 
